@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Carson</title>
+    <script>
+         var i = 0;
+         var s = 0;
+         function show(){
+         var now = new Date();
+
+            var year = now.getFullYear(); //得到年份
+
+            var month = now.getMonth()+1;//得到月份
+
+            var date = now.getDate();//得到日期
+
+            var hour= now.getHours();//得到小时数
+
+            var minute= now.getMinutes();//得到分钟数
+
+            var second= now.getSeconds();//得到秒数
+
+            var time = year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second
+            console.log(time)
+            JS.showTime(time);
+
+         }
+
+         function showInfo(){
+         var info = "\n __    __   _______  __       __        ______      ____    __    ____  ______   .______       __       _______\n|  |  |  | |   ____||  |     |  |      /  __  \\     \\   \\  /  \\  /   / /  __  \\  |   _  \\     |  |     |       \\ \n|  |__|  | |  |__   |  |     |  |     |  |  |  |     \\   \\/    \\/   / |  |  |  | |  |_)  |    |  |     |  .--.  | \n|   __   | |   __|  |  |     |  |     |  |  |  |      \\            /  |  |  |  | |      /     |  |     |  |  |  | \n|  |  |  | |  |____ |  `----.|  `----.|  `--'  |       \\    /\\    /   |  `--'  | |  |\\  \\----.|  `----.|  '--'  | \n|__|  |__| |_______||_______||_______| \\______/         \\__/  \\__/     \\______/  | _| `._____||_______||_______/  \n ";
+          JS.showInfo(info);
+         }
+
+
+         function hide(){
+            JS.hiddenContentView();
+         }
+
+
+    </script>
+</head>
+<body>
+<button type="button" id="button" onclick="hide()" style="font-size:40px">关闭悬浮窗
+</button>
+<br/>
+<h3 style="font-size:40px"></h3>
+<button type="button" id="button1" onclick="show()" style="font-size:40px">当前时间
+</button>
+<h3 style="font-size:40px"></h3>
+<button type="button" id="button2" onclick="showInfo()" style="font-size:40px">输出信息
+</button>
+
+</body>
+</html>

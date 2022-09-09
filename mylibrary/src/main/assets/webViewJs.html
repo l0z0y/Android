@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Carson</title>
+    <script>
+         var i = 0;
+         var s = 0;
+         function show(){
+             if(i == 0 ){
+                 mengyou.exec('redPacketShow','{"status":1}');
+                 i=1;
+             }else{
+                 mengyou.exec('redPacketShow','{"status":0}');
+                 i=0;
+             }
+         }
+
+         function set(){
+            var s1 = "{\"progress\":"+s+"}"
+            mengyou.exec('redPacketChangeProgress',s1);
+            s+= 10 ;
+
+         }
+
+
+         function hide(){
+            mengyou.hiddenContentView();
+
+         }
+
+
+
+
+    </script>
+</head>
+<body>
+<button type="button" id="button" onclick="hide()" style="font-size:40px">关闭悬浮窗
+</button>
+<br/>
+<h3 style="font-size:40px"></h3>
+<button type="button" id="button1" onclick="show()" style="font-size:40px">点击按钮改变悬浮窗显示状态
+</button>
+<h3 style="font-size:40px"></h3>
+<button type="button" id="button2" onclick="set()" style="font-size:40px">点击按钮则调用设置进度条
+</button>
+
+</body>
+</html>
