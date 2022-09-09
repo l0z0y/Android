@@ -16,7 +16,9 @@ public class FloatManager {
 
     private FloatingBallView floatView;
     private WindowManager windowManager;
-    /** 窗口管理器是否添加虚浮窗 */
+    /**
+     * 窗口管理器是否添加虚浮窗
+     */
     private Boolean isAdd = false;
     private final Handler mainHandle = new Handler(Looper.getMainLooper());
     private Context context;
@@ -53,6 +55,7 @@ public class FloatManager {
      * @param floatView FloatingBallView
      */
     public void create(Context context, View floatView) {
+
         if (windowManager == null) {
             initWindowManager(context);
         }
@@ -104,7 +107,7 @@ public class FloatManager {
     /**
      * 获取悬浮窗View
      *
-     * @return  floatView
+     * @return floatView
      */
     public View getFloatView() {
         if (floatView != null) {
@@ -282,6 +285,7 @@ public class FloatManager {
 
     /**
      * 获取悬浮球显示状态
+     *
      * @return
      */
     public Boolean getShowing() {
@@ -299,6 +303,8 @@ public class FloatManager {
             if (isShowing) {
                 try {
                     windowManager.removeViewImmediate(floatView);
+                    isShowing = false;
+                    isAdd = false;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
