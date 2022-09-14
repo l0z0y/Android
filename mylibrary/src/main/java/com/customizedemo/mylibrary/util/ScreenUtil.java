@@ -80,11 +80,12 @@ public class ScreenUtil {
         }
     }
 
+    // px 转 dp
     public static int px2dip(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
-
+    // dp 转 px
     public static int dip2px(Context context, float dipValue) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, context.getResources().getDisplayMetrics());
     }
