@@ -54,12 +54,39 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(intent);
-                throw  new NullPointerException();
             }
         });
         button.setText("跳转悬浮球页面");
         button.setTextSize(18);
         linearLayout.addView(button, params);
+
+        Intent intent1 = new Intent(MainActivity.this, PanitActivity.class);
+        Button button1 = new Button(this);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intent1);
+            }
+        });
+        button1.setText("跳转PaintView");
+        button1.setAllCaps(false);
+        button1.setTextSize(18);
+        linearLayout.addView(button1, params);
+
+
+        Button button2 = new Button(this);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                throw new NullPointerException();
+            }
+        });
+        button2.setText("抛异常");
+        button2.setTextSize(18);
+        linearLayout.addView(button2, params);
+
+
+
     }
 
 
