@@ -1,4 +1,4 @@
-package com.customizedemo.mylibrary;
+package com.customizedemo.mylibrary.util;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -18,8 +18,8 @@ import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
 
 /**
- * Created by lixiaojian on 16/7/5.
- * 反射获取资源ID
+ *
+ * 获取资源ID
  */
 public class ResUtil {
     private static final String TAG = "ResUtil";
