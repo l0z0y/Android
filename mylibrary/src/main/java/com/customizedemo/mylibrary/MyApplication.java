@@ -1,22 +1,90 @@
 package com.customizedemo.mylibrary;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.customizedemo.mylibrary.carsh.CrashManager;
 
 public class MyApplication extends Application {
+    private static final String LIFETAG = "Lifecycle";
+
+    private static MyApplication mContext;
+
+
+    public static MyApplication getContext() {
+        return mContext;
+    }
 
     @Override
     public void onCreate() {
+        super.onCreate();
         // 加载异常收集
         CrashManager.getInstance().init(this);
-        super.onCreate();
+        mContext = this;
+        initLifecycle();
+    }
+
+    // 初始化 监听生命周期状态
+    private void initLifecycle() {
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+                Log.d(LIFETAG, "onCreated: " + activity.getLocalClassName());
+            }
+
+            @Override
+            public void onActivityStarted(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(@NonNull Activity activity) {
+                Log.d(LIFETAG, "onResumed: " + activity.getLocalClassName());
+            }
+
+            @Override
+            public void onActivityPaused(@NonNull Activity activity) {
+                Log.d(LIFETAG, "onPaused: " + activity.getLocalClassName());
+            }
+
+            @Override
+            public void onActivityStopped(@NonNull Activity activity) {
+                Log.d(LIFETAG, "onStopped: " + activity.getLocalClassName());
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(@NonNull Activity activity) {
+                Log.d(LIFETAG, "onDestroyed: " + activity.getLocalClassName());
+            }
+        });
     }
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
 
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        Log.d("TrimMemory", "onTrimMemory: "+level);
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
     }
 }

@@ -21,7 +21,6 @@ public class MainActivity extends Activity {
     private LinearLayout.LayoutParams params;
     private LinearLayout linearLayout;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
