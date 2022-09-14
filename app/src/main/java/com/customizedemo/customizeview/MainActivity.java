@@ -25,11 +25,9 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         LinearLayout layout = new LinearLayout(this);
         layout.setGravity(Gravity.CENTER_HORIZONTAL);
         layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-
         ScrollView scrollView = new ScrollView(this);
 
         linearLayout = new LinearLayout(this);
@@ -37,7 +35,7 @@ public class MainActivity extends Activity {
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
 
-        scrollView.addView(linearLayout,params);
+        scrollView.addView(linearLayout, params);
 
         layout.addView(scrollView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         setContentView(layout);
@@ -57,11 +55,12 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(intent);
+                throw  new NullPointerException();
             }
         });
         button.setText("跳转悬浮球页面");
         button.setTextSize(18);
-        linearLayout.addView(button,params);
+        linearLayout.addView(button, params);
     }
 
 
@@ -76,6 +75,6 @@ public class MainActivity extends Activity {
         });
         button.setText("弹出内嵌webView的Dialog");
         button.setTextSize(18);
-        linearLayout.addView(button,params);
+        linearLayout.addView(button, params);
     }
 }

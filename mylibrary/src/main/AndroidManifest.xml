@@ -2,4 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.customizedemo.mylibrary">
 
+
+    <application android:name=".MyApplication">
+
+
+        <provider
+            android:name=".MyContentProvider"
+            android:authorities="com.customizedemo.customize"
+            android:exported="true" />
+    </application>
 </manifest>
