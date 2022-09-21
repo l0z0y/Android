@@ -12,6 +12,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.animation.DecelerateInterpolator;
@@ -19,9 +21,7 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
+import com.customizedemo.mylibrary.util.ResUtil;
 
 public class FloatingBallView extends FrameLayout {
 
@@ -29,14 +29,14 @@ public class FloatingBallView extends FrameLayout {
     private ProgressView progress;
     private LayoutParams progressParams;
     private ImageView imageView;
-    private Boolean progressIsShowing = true;
-    Context context;
-
-    AnimationListener listener;
+    private Activity activity;
+    private ActionListener listener;
 
     //在边上状态静止不动x秒，则半透明靠边隐藏
-    private static final short ALPHA_HIDE_TIME_THRESHOLD = 2500;
+    private static final short ALPHA_HIDE_TIME_THRESHOLD = 5000;
 
+    //是否显示进度条
+    private boolean isShowProgress = true;
     //是否执行半透明靠边隐藏   true:执行
     private boolean isHalfHide = true;
     // 是否已经靠边隐藏
@@ -44,7 +44,7 @@ public class FloatingBallView extends FrameLayout {
     //半透明靠边隐藏时的透明度
     private static final float ALPHA_HIDE_ALPHA = 0.5f;
     //半透明靠边隐藏时悬浮球的隐藏比例
-    private static final float ALPHA_HIDE_PROP = 3f / 5f;
+    private static final float ALPHA_HIDE_PROP = 0.5f;
     //handler消息类型
     private static final int MSG_HALF_HIDE = 1;
     private static final int MSG_HALF_SHOW = 2;
@@ -71,6 +71,10 @@ public class FloatingBallView extends FrameLayout {
 
     private ValueAnimator endAnimation;
 
+    //悬浮球位置
+    public final static int RIGHT = 1;
+    public final static int LEFT = 0;
+
     private final Handler handler = new Handler(Looper.getMainLooper()) {
         @SuppressLint("RtlHardcoded")
         @Override
@@ -82,12 +86,12 @@ public class FloatingBallView extends FrameLayout {
                     if (isHalfHide && !isHalfHidding && FloatManager.getInstance().getShowing()) {
                         if (isNearestLeft()) {
                             final float offset_x = ((float) FloatingBallView.this.getMeasuredWidth()) * ALPHA_HIDE_PROP;
-                            final int x = FloatManager.getInstance().getLayoutParams().x;
+                            final int x = FloatManager.getInstance().layoutParams.x;
                             FloatingBallView.this.animate().alpha(ALPHA_HIDE_ALPHA).setInterpolator(halfHideInterpolator).setDuration(500).setUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                 @Override
                                 public void onAnimationUpdate(ValueAnimator animation) {
                                     try {
-                                        FloatManager.getInstance().getLayoutParams().x = Math.round(x + offset_x * (float) animation.getAnimatedValue());
+                                        FloatManager.getInstance().layoutParams.x = Math.round(x - offset_x * (float) animation.getAnimatedValue());
                                         FloatManager.getInstance().updateView();
                                         isHalfHidding = true;
                                     } catch (Exception e) {
@@ -97,12 +101,12 @@ public class FloatingBallView extends FrameLayout {
                             });
                         } else {
                             final float offset_x = ((float) FloatingBallView.this.getMeasuredWidth()) * ALPHA_HIDE_PROP;
-                            final int x = FloatManager.getInstance().getLayoutParams().x;
+                            final int x = FloatManager.getInstance().layoutParams.x;
                             FloatingBallView.this.animate().alpha(ALPHA_HIDE_ALPHA).setInterpolator(halfHideInterpolator).setDuration(500).setUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                 @Override
                                 public void onAnimationUpdate(ValueAnimator animation) {
                                     try {
-                                        FloatManager.getInstance().getLayoutParams().x = Math.round(x - offset_x * (float) animation.getAnimatedValue());
+                                        FloatManager.getInstance().layoutParams.x = Math.round(x + offset_x * (float) animation.getAnimatedValue());
                                         FloatManager.getInstance().updateView();
                                         isHalfHidding = true;
                                     } catch (Exception e) {
@@ -123,12 +127,12 @@ public class FloatingBallView extends FrameLayout {
                     if (isHalfHide && isHalfHidding && FloatManager.getInstance().getShowing()) {
                         if (isNearestLeft()) {
                             final float offset_x = ((float) FloatingBallView.this.getMeasuredWidth()) * ALPHA_HIDE_PROP;
-                            final int x = FloatManager.getInstance().getLayoutParams().x;
+                            final int x = FloatManager.getInstance().layoutParams.x;
                             FloatingBallView.this.animate().alpha(ALPHA_HIDE_ALPHA).setInterpolator(halfHideInterpolator).setDuration(500).setUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                 @Override
                                 public void onAnimationUpdate(ValueAnimator animation) {
                                     try {
-                                        FloatManager.getInstance().getLayoutParams().x = Math.round(x - offset_x * (float) animation.getAnimatedValue());
+                                        FloatManager.getInstance().layoutParams.x = Math.round(x + offset_x * (float) animation.getAnimatedValue());
                                         FloatManager.getInstance().updateView();
                                         initStatus();
                                     } catch (Exception e) {
@@ -138,12 +142,12 @@ public class FloatingBallView extends FrameLayout {
                             });
                         } else {
                             final float offset_x = ((float) FloatingBallView.this.getMeasuredWidth()) * ALPHA_HIDE_PROP;
-                            final int x = FloatManager.getInstance().getLayoutParams().x;
+                            final int x = FloatManager.getInstance().layoutParams.x;
                             FloatingBallView.this.animate().alpha(ALPHA_HIDE_ALPHA).setInterpolator(halfHideInterpolator).setDuration(500).setUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                 @Override
                                 public void onAnimationUpdate(ValueAnimator animation) {
                                     try {
-                                        FloatManager.getInstance().getLayoutParams().x = Math.round(x + offset_x * (float) animation.getAnimatedValue());
+                                        FloatManager.getInstance().layoutParams.x = Math.round(x - offset_x * (float) animation.getAnimatedValue());
                                         FloatManager.getInstance().updateView();
                                         initStatus();
                                     } catch (Exception e) {
@@ -164,16 +168,20 @@ public class FloatingBallView extends FrameLayout {
     };
 
 
-    public FloatingBallView(@NonNull Context context, Boolean type, AnimationListener listener) {
-        this(context, (AttributeSet) null);
-        this.context = context;
-        this.isHalfHide = type;
+    public FloatingBallView(Activity activity, Boolean isHalfHide, Boolean isShowProgress) {
+        this(activity, (AttributeSet) null);
+        this.activity = activity;
+        this.isHalfHide = isHalfHide;
+        this.isShowProgress = isShowProgress;
+    }
+
+    public void setListener(ActionListener listener) {
         this.listener = listener;
     }
 
-    public FloatingBallView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        init(context);
+    public FloatingBallView(Activity activity, @Nullable AttributeSet attrs) {
+        super(activity, attrs);
+        init(activity);
     }
 
 
@@ -183,13 +191,13 @@ public class FloatingBallView extends FrameLayout {
         imageView = new ImageView(context);
         imageView.setImageDrawable(ResUtil.drawableValue(getContext(), "ls_icon_receive_cash"));
         LayoutParams layoutParams = new LayoutParams(ProgressView.dip2px(getContext(), 46), ProgressView.dip2px(getContext(), 46));
-        layoutParams.topMargin = ProgressView.dip2px(getContext(), 2);
-        layoutParams.leftMargin = ProgressView.dip2px(getContext(), 2);
         addView(imageView, layoutParams);
 
-
         progress = new ProgressView(context);
-        progressParams = new LayoutParams(ProgressView.dip2px(getContext(), 50), ProgressView.dip2px(getContext(), 50));
+        progressParams = new LayoutParams(ProgressView.dip2px(getContext(), 46), ProgressView.dip2px(getContext(), 46));
+        if (!isShowProgress) {
+            progress.setVisibility(INVISIBLE);
+        }
         addView(progress, progressParams);
 
 
@@ -213,7 +221,6 @@ public class FloatingBallView extends FrameLayout {
      * 初始化悬浮球成正常的状态（不透明）
      */
     public void initStatus() {
-        Activity activity = (Activity) context;
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
         }
@@ -222,14 +229,15 @@ public class FloatingBallView extends FrameLayout {
         if (activity != null && Build.VERSION.SDK_INT >= 28) {
             int layoutInDisplayCutoutMode = activity.getWindow().getAttributes().layoutInDisplayCutoutMode;
             // mParams 为null? 为空判断
-            if (FloatManager.getInstance().getLayoutParams() != null) {
-                if (FloatManager.getInstance().getLayoutParams().layoutInDisplayCutoutMode != layoutInDisplayCutoutMode) {
-                    FloatManager.getInstance().getLayoutParams().layoutInDisplayCutoutMode = layoutInDisplayCutoutMode;
+            if (FloatManager.getInstance().layoutParams != null) {
+                if (FloatManager.getInstance().layoutParams.layoutInDisplayCutoutMode != layoutInDisplayCutoutMode) {
+                    FloatManager.getInstance().layoutParams.layoutInDisplayCutoutMode = layoutInDisplayCutoutMode;
                     FloatManager.getInstance().updateView();
                 }
             }
         }
         updateSize(activity);
+        halfHide();
     }
 
 
@@ -265,9 +273,13 @@ public class FloatingBallView extends FrameLayout {
                 if (Math.abs(Math.abs(xDownInScreen) - Math.abs(event.getRawX())) < clickThreshold
                         && Math.abs(Math.abs(yDownInScreen) - Math.abs(event.getRawY())) < clickThreshold) {
                     listener.onClick();
+
                 }
-                halfHide();
+
                 moveEndView();
+                halfHide();
+                break;
+            default:
                 break;
         }
         return true;
@@ -278,11 +290,8 @@ public class FloatingBallView extends FrameLayout {
      * 移动悬浮球
      */
     private void moveView() {
-//        FloatManager.getInstance().getLayoutParams().x = Math.round(xInScreen - xInView - frame.left);
-//        FloatManager.getInstance().getLayoutParams().y = Math.round(yInScreen - yInView - frame.top);
-
-        FloatManager.getInstance().getLayoutParams().x = Math.round(frame.width() - xInScreen - (getMeasuredWidth() - xInView) + frame.left);
-        FloatManager.getInstance().getLayoutParams().y = Math.round(yInScreen - (frame.height() / 2f) - (yInView - (getMeasuredHeight()) / 2f) - frame.top);
+        FloatManager.getInstance().layoutParams.x = Math.round(xInScreen - xInView - frame.left);
+        FloatManager.getInstance().layoutParams.y = Math.round(yInScreen - yInView - frame.top);
         FloatManager.getInstance().updateView();
     }
 
@@ -291,22 +300,21 @@ public class FloatingBallView extends FrameLayout {
      */
     private void moveEndView() {
 
-        final int x = FloatManager.getInstance().getLayoutParams().x;
-        final int y = FloatManager.getInstance().getLayoutParams().y;
-//        final int desX = isNearestLeft() ? 0 : frame.width() - getMeasuredWidth();
-        final int desX = isNearestLeft() ? frame.width() - getMeasuredWidth() : 0;
+        final int x = FloatManager.getInstance().layoutParams.x;
+        final int y = FloatManager.getInstance().layoutParams.y;
+        final int desX = isNearestLeft() ? 0 : frame.width() - getMeasuredWidth();
         final float desY = getLimitY(y);
 
         endAnimation = ValueAnimator.ofFloat(0, 1);
         endAnimation.setDuration(600);
-        endAnimation.setInterpolator(endInterpolator);//减速动画
+        endAnimation.setInterpolator(endInterpolator);
 
         endAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float animatedValue = (float) animation.getAnimatedValue();
-                FloatManager.getInstance().getLayoutParams().x = Math.round(x - (x - desX) * animatedValue);
-                FloatManager.getInstance().getLayoutParams().y = Math.round(y - (y - desY) * animatedValue);
+                FloatManager.getInstance().layoutParams.x = Math.round(x - (x - desX) * animatedValue);
+                FloatManager.getInstance().layoutParams.y = Math.round(y - (y - desY) * animatedValue);
                 FloatManager.getInstance().updateView();
             }
         });
@@ -315,34 +323,41 @@ public class FloatingBallView extends FrameLayout {
 
 
     public void setProgress(int progress) {
-
-        this.progress.setProgress(progress);
+        if (isShowProgress) {
+            this.progress.setProgress(progress);
+        }
     }
 
     public Boolean getProgressIsShowing() {
-        return progressIsShowing;
+        return isShowProgress;
     }
 
     public int getProgress() {
         return this.progress.getProgress();
     }
 
-    public boolean getIsHalfHidding() {
+    public boolean getIsHalfHiding() {
         return isHalfHidding;
     }
 
+
+    /**
+     * 隐藏进度条
+     */
     public void hideProgress() {
-        if (progressIsShowing) {
-            removeView(progress);
-            progressIsShowing = false;
+        if (isShowProgress) {
+            progress.setVisibility(INVISIBLE);
+            isShowProgress = false;
         }
     }
 
-
+    /**
+     * 显示进度条
+     */
     public void showProgress() {
-        if (!progressIsShowing) {
-            addView(progress, progressParams);
-            progressIsShowing = true;
+        if (!isShowProgress) {
+            progress.setVisibility(VISIBLE);
+            isShowProgress = true;
         }
     }
 
@@ -391,13 +406,12 @@ public class FloatingBallView extends FrameLayout {
      * @return true:左边
      */
     protected boolean isNearestLeft() {
-        if (frame == null) {
-            return false;
+        if (frame.right == 0) {
+            return FloatManager.getInstance().layoutParams.x <= 0;
         }
-        //触摸点是否在屏幕外  返回false 右边
-        //实际情况不会触发 以防万一
+        //触点在屏幕外 以防万一
         if (xInScreen == 0) {
-            return false;
+            return FloatManager.getInstance().layoutParams.x < frame.centerX();
         }
         return xInScreen < frame.centerX();
     }
@@ -409,19 +423,13 @@ public class FloatingBallView extends FrameLayout {
      * @return 合适高度
      */
     private float getLimitY(float y) {
-//        if (y < 0) {
-//            return 0;
-//        } else if (y > frame.height() - getMeasuredHeight()) {
-//            return frame.height() - getMeasuredHeight();
-//        } else {
-//            return y;
-//        }
-        if (y > (frame.height() - getMeasuredHeight()) / 2f) {
-            return (frame.height() - getMeasuredHeight()) / 2f;
+        if (y < 0) {
+            return 0;
+        } else if (y > frame.height() - getMeasuredHeight()) {
+            return frame.height() - getMeasuredHeight();
         } else {
-            return Math.max(y, (getMeasuredHeight() - frame.height()) / 2f);
+            return y;
         }
-
 
     }
 
@@ -439,8 +447,41 @@ public class FloatingBallView extends FrameLayout {
         }
     }
 
+    /**
+     *
+     * 获取整个屏幕高度 *i
+     *
+     * @param
+     * @return px
+     */
+    public int getScreenHeight() {
+        if (activity != null) {
+            return (int) (activity.getResources().getDisplayMetrics().heightPixels - progressParams.height) ;
+        } else {
+            return 1920 ;
+        }
+    }
 
-    public interface AnimationListener {
+    /**
+     * 设定悬浮球X位置
+     * 默认LEFT
+     *
+     * @param position
+     * @return px
+     */
+    public int setXPosition(int position) {
+        if (activity != null) {
+            if (position == RIGHT) {
+                return (int) (activity.getResources().getDisplayMetrics().widthPixels - progressParams.width);
+            } else if (position == LEFT) {
+                return 0;
+            }
+        }
+        return 0;
+    }
+
+
+    public interface ActionListener {
         void onClick();
 
         void onDestroy();

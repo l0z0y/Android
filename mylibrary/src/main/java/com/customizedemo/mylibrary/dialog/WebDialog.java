@@ -3,6 +3,7 @@ package com.customizedemo.mylibrary.dialog;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -11,7 +12,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 
 import com.customizedemo.mylibrary.R;
 

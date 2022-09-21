@@ -2,11 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.customizedemo.mylibrary">
 
-    <application android:name=".MyApplication">
+    <uses-permission android:name="android.permission.INTERNET" />
 
+    <application android:name=".MyApplication"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true">
+        <activity
+            android:name=".activitys.WebViewActivity"
+            android:configChanges="orientation|navigation|keyboardHidden|screenLayout|screenSize"
+            android:exported="false" />
         <provider
             android:name=".MyContentProvider"
             android:authorities="com.customizedemo.customize"
             android:exported="true" />
     </application>
+
 </manifest>

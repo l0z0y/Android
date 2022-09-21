@@ -25,14 +25,14 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LinearLayout layout = new LinearLayout(this);
-        layout.setGravity(Gravity.CENTER_HORIZONTAL);
+        layout.setGravity(Gravity.CENTER);
         layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         ScrollView scrollView = new ScrollView(this);
 
         linearLayout = new LinearLayout(this);
-        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-
+        linearLayout.setGravity(Gravity.CENTER);
 
         scrollView.addView(linearLayout, params);
 
@@ -44,47 +44,73 @@ public class MainActivity extends Activity {
 
     private void initView() {
         initWebDialog();
-        initMoveButton();
+        initButton();
     }
 
-    private void initMoveButton() {
-        Intent intent = new Intent(MainActivity.this, FloatManagerActivity.class);
-        Button button = new Button(this);
-        button.setOnClickListener(new View.OnClickListener() {
+    private void initButton() {
+        Intent floatManagerIntent = new Intent(MainActivity.this, FloatManagerActivity.class);
+        Button moveFloatManager = new Button(this);
+        moveFloatManager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(intent);
+                startActivity(floatManagerIntent);
             }
         });
-        button.setText("跳转悬浮球页面");
-        button.setTextSize(18);
-        linearLayout.addView(button, params);
+        moveFloatManager.setText("跳转悬浮球页面");
+        moveFloatManager.setTextSize(18);
+        linearLayout.addView(moveFloatManager, params);
 
-        Intent intent1 = new Intent(MainActivity.this, PanitActivity.class);
-        Button button1 = new Button(this);
-        button1.setOnClickListener(new View.OnClickListener() {
+        Intent panitIntent = new Intent(MainActivity.this, PanitActivity.class);
+        Button movePanit = new Button(this);
+        movePanit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(intent1);
+                startActivity(panitIntent);
             }
         });
-        button1.setText("跳转PaintView");
-        button1.setAllCaps(false);
-        button1.setTextSize(18);
-        linearLayout.addView(button1, params);
+        movePanit.setText("跳转PaintView");
+        movePanit.setAllCaps(false);
+        movePanit.setTextSize(18);
+        linearLayout.addView(movePanit, params);
 
 
-        Button button2 = new Button(this);
-        button2.setOnClickListener(new View.OnClickListener() {
+        Button throwException = new Button(this);
+        throwException.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 throw new NullPointerException();
             }
         });
-        button2.setText("抛异常");
-        button2.setTextSize(18);
-        linearLayout.addView(button2, params);
+        throwException.setText("抛异常");
+        throwException.setTextSize(18);
+        linearLayout.addView(throwException, params);
 
+
+        Intent videoIntent = new Intent(MainActivity.this, VideoActivity.class);
+        Button moveVideo = new Button(this);
+        moveVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(videoIntent);
+            }
+        });
+        moveVideo.setText("视频");
+        moveVideo.setAllCaps(false);
+        moveVideo.setTextSize(18);
+        linearLayout.addView(moveVideo, params);
+
+        Intent todayintent = new Intent(MainActivity.this, TodayActivity.class);
+        Button moveToday = new Button(this);
+        moveToday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(todayintent);
+            }
+        });
+        moveToday.setText("历史上的今天");
+        moveToday.setAllCaps(false);
+        moveToday.setTextSize(18);
+        linearLayout.addView(moveToday, params);
 
 
     }

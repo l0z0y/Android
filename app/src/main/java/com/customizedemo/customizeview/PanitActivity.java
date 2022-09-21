@@ -1,12 +1,12 @@
 package com.customizedemo.customizeview;
 
-import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import com.customizedemo.mylibrary.view.PaintView;
 
-public class PanitActivity extends AppCompatActivity {
+public class PanitActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

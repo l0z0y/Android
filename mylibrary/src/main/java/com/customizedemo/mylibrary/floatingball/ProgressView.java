@@ -5,10 +5,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import androidx.annotation.Nullable;
+import com.customizedemo.mylibrary.util.ResUtil;
 
 
 public class ProgressView extends View {
@@ -41,7 +42,7 @@ public class ProgressView extends View {
         // 设置画笔颜色
         progressPaint.setColor(ResUtil.colorValue(context, "progress"));
         // 画笔 线条粗细
-        progressPaint.setStrokeWidth(dip2px(getContext(), 3));
+        progressPaint.setStrokeWidth(dip2px(getContext(), 1));
         //进度条初始值
         progress = 0;
     }

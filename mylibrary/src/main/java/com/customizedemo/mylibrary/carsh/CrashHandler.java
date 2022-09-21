@@ -8,7 +8,6 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,7 +40,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
     }
 
-    @Nullable
+
     public Context getContext() {
         if (contextWeakReference != null) {
             return contextWeakReference.get();
@@ -91,9 +90,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
         try {
             // TODO:自定义错误处理,收集错误信息 发送错误报告等操作均在此完成
-
             saveCrashInfoFile(ex);
-
             new Thread(new Runnable() {
                 @Override
                 public void run() {

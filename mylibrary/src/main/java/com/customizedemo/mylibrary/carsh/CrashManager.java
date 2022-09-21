@@ -4,10 +4,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-
-
-import androidx.annotation.NonNull;
-import androidx.annotation.WorkerThread;
+import android.support.annotation.NonNull;
+import android.support.annotation.WorkerThread;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,6 +60,7 @@ public class CrashManager {
 
 
     /**
+     * //todo: 上传服务器操作
      * 检测遍历错误报告，把错误报告发送给服务器,包含新产生的和以前没发送的.
      */
     @WorkerThread

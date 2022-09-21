@@ -1,22 +1,18 @@
 package com.customizedemo.customizeview;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.customizedemo.mylibrary.floatingball.FloatManager;
 import com.customizedemo.mylibrary.floatingball.FloatingBallView;
-import com.customizedemo.mylibrary.floatingball.ProgressView;
 
 public class FloatManagerActivity extends Activity {
 
@@ -102,7 +98,7 @@ public class FloatManagerActivity extends Activity {
         button5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FloatManager.getInstance().create(FloatManagerActivity.this, new FloatingBallView(FloatManagerActivity.this, true, new FloatingBallView.AnimationListener() {
+                FloatManager.getInstance().create(FloatManagerActivity.this, true, new FloatingBallView.ActionListener() {
                     @Override
                     public void onClick() {
                         Toast.makeText(FloatManagerActivity.this, "点击了悬浮窗", Toast.LENGTH_SHORT).show();
@@ -114,7 +110,7 @@ public class FloatManagerActivity extends Activity {
                         Toast.makeText(FloatManagerActivity.this, "悬浮窗销毁", Toast.LENGTH_SHORT).show();
 
                     }
-                }));
+                });
                 FloatManager.getInstance().display();
 
             }

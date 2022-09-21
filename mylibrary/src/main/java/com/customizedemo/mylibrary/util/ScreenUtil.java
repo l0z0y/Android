@@ -8,7 +8,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.WindowManager;
 
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 
 import java.util.HashMap;
 

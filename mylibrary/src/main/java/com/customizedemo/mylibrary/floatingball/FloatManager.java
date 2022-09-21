@@ -21,8 +21,8 @@ public class FloatManager {
      */
     private Boolean isAdd = false;
     private final Handler mainHandle = new Handler(Looper.getMainLooper());
-    private Context context;
-    private WindowManager.LayoutParams layoutParams;
+    private Activity activity;
+    public WindowManager.LayoutParams layoutParams;
 
     /**
      * 悬浮球显示状态 true--显示  false--未显示
@@ -51,21 +51,24 @@ public class FloatManager {
     /**
      * 创建悬浮窗
      *
-     * @param context
-     * @param floatView FloatingBallView
+     *
      */
-    public void create(Context context, View floatView) {
 
+    public void create(Activity activity, Boolean isHalfHide, FloatingBallView.ActionListener listener) {
         if (windowManager == null) {
-            initWindowManager(context);
+            windowManager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
         }
         if (this.floatView != null) {
             return;
         }
-        if (floatView == null) {
-            throw new NullPointerException("floatView is null");
+        floatView = new FloatingBallView(activity, isHalfHide, true);
+
+        if (listener != null) {
+            floatView.setListener(listener);
         }
-        this.floatView = (FloatingBallView) floatView;
+
+        this.activity = activity;
+
     }
 
     /**
@@ -75,34 +78,26 @@ public class FloatManager {
      */
 
     public WindowManager.LayoutParams getLayoutParams() {
-        if (layoutParams == null) {
-            // 设置LayoutParam
-            layoutParams = new WindowManager.LayoutParams();
-            layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
-            //设置flags 不然悬浮窗出来后整个屏幕都无法获取焦点，
-            layoutParams.gravity = Gravity.END | Gravity.CENTER;
-            layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
-            layoutParams.format = PixelFormat.RGBA_8888;
-            layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-            layoutParams.x = 0;
-            layoutParams.y = 0;
-            if (Build.VERSION.SDK_INT >= 28) {
-                layoutParams.layoutInDisplayCutoutMode = ((Activity) context).getWindow().getAttributes().layoutInDisplayCutoutMode;
-            }
+
+        // 设置LayoutParam
+        layoutParams = new WindowManager.LayoutParams();
+        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
+        //设置flags 不然悬浮窗出来后整个屏幕都无法获取焦点，
+        layoutParams.gravity = Gravity.START | Gravity.TOP;
+        layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
+        layoutParams.format = PixelFormat.RGBA_8888;
+        layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        // 设置初始位置
+        layoutParams.x = floatView.setXPosition(FloatingBallView.RIGHT);
+        layoutParams.y = floatView.getScreenHeight()/2;
+        if (Build.VERSION.SDK_INT >= 28) {
+            layoutParams.layoutInDisplayCutoutMode = activity.getWindow().getAttributes().layoutInDisplayCutoutMode;
         }
+
         return layoutParams;
     }
 
-    /**
-     * 初始化WindowManager
-     *
-     * @param context
-     */
-    public void initWindowManager(Context context) {
-        this.context = context;
-        windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-    }
 
     /**
      * 获取悬浮窗View
@@ -158,12 +153,11 @@ public class FloatManager {
      * 显示悬浮球进度条
      */
     public void displayProgress() {
-        if (floatView != null && isShowing) {
+        if (floatView != null && isAdd) {
             mainHandle.post(new Runnable() {
                 @Override
                 public void run() {
-                    FloatingBallView floatingBallView = (FloatingBallView) floatView;
-                    floatingBallView.showProgress();
+                    floatView.showProgress();
                 }
             });
 
@@ -173,13 +167,13 @@ public class FloatManager {
     /**
      * 隐藏悬浮球进度条
      */
+
     public void hideProgress() {
-        if (floatView != null && isShowing) {
+        if (floatView != null && isAdd) {
             mainHandle.post(new Runnable() {
                 @Override
                 public void run() {
-                    FloatingBallView floatingBallView = (FloatingBallView) floatView;
-                    floatingBallView.hideProgress();
+                    floatView.hideProgress();
                 }
             });
 
@@ -249,8 +243,9 @@ public class FloatManager {
      * 关闭悬浮球
      */
     public void close() {
-        if (floatView != null && isShowing) {
+        if (floatView != null && isAdd) {
             windowManager.removeViewImmediate(floatView);
+            isShowing = false;
             isAdd = false;
         }
     }
@@ -300,7 +295,7 @@ public class FloatManager {
             floatView.destroy();
         }
         if (windowManager != null) {
-            if (isShowing) {
+            if (isAdd) {
                 try {
                     windowManager.removeViewImmediate(floatView);
                     isShowing = false;
