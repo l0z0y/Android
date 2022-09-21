@@ -91,7 +91,6 @@ public class NetworkRequest {
         RetrofitService.getInstance().api.todayInHistory("https://api.asilu.com/today").enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
                 try {
                     if (response.body() != null) {
                         resultCallback.callback(response.body().string());
@@ -101,6 +100,26 @@ public class NetworkRequest {
                 }
             }
 
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void getMp3(ResultCallback resultCallback) {
+        RetrofitService.getInstance().api.getMp3("https://api.uomg.com/api/rand.music?sort=热歌榜&format=json").enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    if (response.body() != null) {
+                        resultCallback.callback(response.body().string());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {

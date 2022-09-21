@@ -25,4 +25,7 @@ public interface Api {
 
     @GET()
     Call<ResponseBody> todayInHistory(@Url String url);
+
+    @GET()
+    Call<ResponseBody> getMp3(@Url String url);
 }
