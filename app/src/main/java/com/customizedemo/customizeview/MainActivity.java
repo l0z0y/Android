@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
 
     private LinearLayout.LayoutParams params;
     private LinearLayout linearLayout;
-    private MediaPlayer mediaPlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,26 +59,6 @@ public class MainActivity extends Activity {
 
     }
 
-    private void play() {
-        NetworkRequest.getInstance().getMp3(new ResultCallback() {
-            @Override
-            public void callback(String result) {
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    JSONObject data = jsonObject.optJSONObject("data");
-                    if (data != null) {
-                        String url = data.optString("url");
-                        if (!TextUtils.isEmpty(url)) {
-                            mediaPlayer.setDataSource(url);
-                            mediaPlayer.prepareAsync();
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     private void initButton() {
         Intent floatManagerIntent = new Intent(MainActivity.this, FloatManagerActivity.class);
