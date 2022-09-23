@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -14,6 +15,8 @@ import android.widget.ScrollView;
 import com.customizedemo.mylibrary.api.NetworkRequest;
 import com.customizedemo.mylibrary.api.ResultCallback;
 import com.customizedemo.mylibrary.dialog.WebDialog;
+import com.customizedemo.mylibrary.util.DecodeUtil;
+import com.customizedemo.mylibrary.view.MusicView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +41,7 @@ public class MainActivity extends Activity {
         ScrollView scrollView = new ScrollView(this);
 
         linearLayout = new LinearLayout(this);
-        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setGravity(Gravity.CENTER);
 
@@ -53,25 +56,6 @@ public class MainActivity extends Activity {
     private void initView() {
         initWebDialog();
         initButton();
-        initMediaPlayer();
-    }
-
-    private void initMediaPlayer() {
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mediaPlayer.reset();
-                play();
-            }
-        });
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mediaPlayer.start();
-            }
-        });
-        play();
 
     }
 
@@ -122,6 +106,29 @@ public class MainActivity extends Activity {
         movePanit.setTextSize(18);
         linearLayout.addView(movePanit, params);
 
+        Button networkRequest = new Button(this);
+        networkRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NetworkRequest.getInstance().getJoke(new ResultCallback() {
+                    @Override
+                    public void callback(String result) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(result);
+                            String text = jsonObject.optString("text");
+                            System.out.println(DecodeUtil.unicodeToCN(text));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+            }
+        });
+        networkRequest.setText("网络请求");
+        networkRequest.setAllCaps(false);
+        networkRequest.setTextSize(18);
+        linearLayout.addView(networkRequest, params);
 
         Button throwException = new Button(this);
         throwException.setOnClickListener(new View.OnClickListener() {
@@ -162,6 +169,8 @@ public class MainActivity extends Activity {
         linearLayout.addView(moveToday, params);
 
 
+        MusicView musicView = new MusicView(this);
+        addContentView(musicView,params);
     }
 
 
@@ -182,11 +191,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
+
 
     }
 }

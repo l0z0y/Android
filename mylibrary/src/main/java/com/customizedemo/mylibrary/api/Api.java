@@ -12,7 +12,7 @@ public interface Api {
     String BASE_JOKE = "https://ali-joke.showapi.com";
     String JOKE_HITOKOTO = "https://api.wrdan.com/hitokoto";
 
-    @Headers({"Authorization:APPCODE 6377839b302745a4a61ba52a1257cc61"})
+    @Headers({"Authorization:APPCODE 6377839b302745a4a61ba52a1257cc61","api:JOKE_HITOKOTO"})
     @GET("/textJoke")
     Call<ResponseBody> getTextJoke(@Query("maxResult") int i);
 

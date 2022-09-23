@@ -38,7 +38,7 @@ public class InfoItemView extends LinearLayout {
         setOrientation(VERTICAL);
 
         LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setBackground(ResUtil.drawableValue(context, "background_paper"));
+        linearLayout.setBackground(ResUtil.drawableValue(context, "background_shadow"));
         year = new TextView(context);
         year.setTextSize(20);
         year.setTypeface(Typeface.MONOSPACE);

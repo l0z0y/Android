@@ -1,6 +1,7 @@
 package com.customizedemo.mylibrary.api;
 
 import java.io.IOException;
+import java.util.Random;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -109,7 +110,10 @@ public class NetworkRequest {
     }
 
     public void getMp3(ResultCallback resultCallback) {
-        RetrofitService.getInstance().api.getMp3("https://api.uomg.com/api/rand.music?sort=热歌榜&format=json").enqueue(new Callback<ResponseBody>() {
+        final String[] types = {"热歌榜", "新歌榜", "飙升榜", "抖音榜", "电音榜"};
+        Random random = new Random();
+        int num = random.nextInt(4);
+        RetrofitService.getInstance().api.getMp3("https://api.uomg.com/api/rand.music?sort="+types[num]+"&format=json").enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {

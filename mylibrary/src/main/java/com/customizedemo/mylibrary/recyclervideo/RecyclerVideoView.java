@@ -5,8 +5,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
@@ -31,7 +29,6 @@ import java.util.List;
 
 public class RecyclerVideoView extends LinearLayout {
 
-    private final Handler handler = new Handler(Looper.getMainLooper());
     public static List<UriPic> URLs;
     private final Context context;
     private static MyAdapter adapter;
@@ -67,20 +64,14 @@ public class RecyclerVideoView extends LinearLayout {
     public RecyclerVideoView(Context context) {
         super(context);
         this.context = context;
+        if (URLs == null) {
+            URLs = new ArrayList<>();
+            Toast.makeText(context, "视频加载失败", Toast.LENGTH_SHORT).show();
+        }
         initView();
 
     }
 
-    // 初始化数据源
-    public void initUrls() {
-        if (URLs == null) {
-            URLs = new ArrayList<UriPic>();
-        }
-        for (int i = 0; i < 5; i++) {
-            NetworkRequest.getInstance().getMp4(this.resultCallback);
-        }
-
-    }
 
     /**
      * 初始化View
