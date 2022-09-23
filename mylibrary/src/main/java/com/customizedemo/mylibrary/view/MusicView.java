@@ -111,8 +111,8 @@ public class MusicView extends LinearLayout {
         seekBar.setPadding(ScreenUtil.dip2px(context, 10), 0, ScreenUtil.dip2px(context, 10), 0);
         seekBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#0DA5D3")));
         seekBar.setProgressBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#c0c0c0")));
-        Drawable thumb = ResUtil.drawableValue(context, "thumb");
-        seekBar.setThumb(thumb);
+        seekBar.setThumb(null);
+
         progressLinearLayout.addView(seekBar, seekBarParams);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -293,6 +293,7 @@ public class MusicView extends LinearLayout {
 
     /**
      * 播放歌曲
+     *
      * @param url
      * @param name
      * @param artistsname
