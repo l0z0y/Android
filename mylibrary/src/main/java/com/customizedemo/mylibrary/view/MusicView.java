@@ -16,15 +16,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.customizedemo.mylibrary.api.NetworkRequest;
+import com.customizedemo.mylibrary.MyApplication;
+import com.customizedemo.mylibrary.api.RequestController;
+import com.customizedemo.mylibrary.api.ResponseHandling;
 import com.customizedemo.mylibrary.api.ResultCallback;
 import com.customizedemo.mylibrary.util.ResUtil;
 import com.customizedemo.mylibrary.util.ScreenUtil;
 
-import org.json.JSONObject;
-
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -39,12 +38,35 @@ public class MusicView extends LinearLayout {
     private final ScheduledExecutorService service = Executors.newScheduledThreadPool(5);
     public static List<SongInfo> songInfos;
     private int nowIndex = 0;
-    ImageView imageView;
+    private ImageView imageView;
+
 
     public MusicView(Context context) {
         super(context);
         initView(context);
+        for (int i = 0; i < 5; i++) {
+            initSongs();
+        }
         initMediaPlayer();
+    }
+
+    private void initSongs() {
+        RequestController.getInstance().getMp3(new ResultCallback() {
+            @Override
+            public void callback(String result) {
+                ResponseHandling.mp3ResponseHandling(result, new ResultCallback() {
+                    @Override
+                    public void callback(String result) {
+                        if (ResponseHandling.URL_ADD_SUCCESS.equals(result)) {
+                            if (MyApplication.firstCall) {
+                                MyApplication.firstCall = false;
+                                play(songInfos.get(nowIndex));
+                            }
+                        }
+                    }
+                });
+            }
+        });
     }
 
 
@@ -264,12 +286,10 @@ public class MusicView extends LinearLayout {
                 }, 0, 1, TimeUnit.SECONDS);
             }
         });
-        getNewSong();
-
     }
 
     private void playNext() {
-        if (songInfos.size() - 1 == nowIndex) {
+        if (songInfos.size() - 3 == nowIndex) {
             getNewSong();
         } else {
             nowIndex++;
@@ -281,25 +301,21 @@ public class MusicView extends LinearLayout {
      * 获取新歌曲并播放
      */
     private void getNewSong() {
-        NetworkRequest.getInstance().getMp3(new ResultCallback() {
+        RequestController.getInstance().getMp3(new ResultCallback() {
             @Override
             public void callback(String result) {
                 try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    JSONObject data = jsonObject.optJSONObject("data");
-                    if (data != null) {
-                        String url = data.optString("url");
-                        String name = data.optString("name");
-                        String picurl = data.optString("picurl");
-                        String artistsname = data.optString("artistsname");
-                        if (songInfos == null) {
-                            songInfos = new ArrayList<>();
+                    ResponseHandling.mp3ResponseHandling(result, new ResultCallback() {
+                        @Override
+                        public void callback(String result) {
+                            if (ResponseHandling.URL_ADD_SUCCESS.equals(result)) {
+                                nowIndex++;
+                                play(songInfos.get(nowIndex));
+                            }
                         }
-                        songInfos.add(new SongInfo(name, artistsname, url, picurl));
-                        nowIndex = songInfos.size() - 1;
-                        play(songInfos.get(nowIndex));
-                    }
-                } catch (Exception e) {
+                    });
+                } catch (
+                        Exception e) {
                     Toast.makeText(getContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
@@ -368,7 +384,7 @@ public class MusicView extends LinearLayout {
     /**
      * 歌曲信息类
      */
-    static class SongInfo {
+    public static class SongInfo {
         String name;
         String artistsname;
         String url;
@@ -380,6 +396,7 @@ public class MusicView extends LinearLayout {
             this.url = url;
             this.picurl = picurl;
         }
+
     }
 
     public void destroy() {

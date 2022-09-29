@@ -2,23 +2,17 @@ package com.customizedemo.customizeview;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
-import com.customizedemo.mylibrary.api.NetworkRequest;
+import com.customizedemo.mylibrary.api.RequestController;
 import com.customizedemo.mylibrary.api.ResultCallback;
 import com.customizedemo.mylibrary.dialog.WebDialog;
 import com.customizedemo.mylibrary.util.DecodeUtil;
-import com.customizedemo.mylibrary.util.ScreenUtil;
-import com.customizedemo.mylibrary.view.MarqueeTextView;
 import com.customizedemo.mylibrary.view.MusicView;
 
 import org.json.JSONException;
@@ -94,7 +88,7 @@ public class MainActivity extends Activity {
         networkRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NetworkRequest.getInstance().getJoke(new ResultCallback() {
+                RequestController.getInstance().getJoke(new ResultCallback() {
                     @Override
                     public void callback(String result) {
                         try {

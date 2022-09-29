@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.customizedemo.mylibrary.api.NetworkRequest;
+import com.customizedemo.mylibrary.api.RequestController;
 import com.customizedemo.mylibrary.api.ResponseHandling;
 import com.customizedemo.mylibrary.api.ResultCallback;
 import com.customizedemo.mylibrary.carsh.CrashManager;
@@ -17,6 +17,7 @@ public class MyApplication extends Application {
     private static final String LIFETAG = "Lifecycle";
 
     private static MyApplication mContext;
+    public static boolean firstCall = true;
 
 
     public static MyApplication getContext() {
@@ -38,7 +39,7 @@ public class MyApplication extends Application {
     }
 
     private void initUrls() {
-        NetworkRequest.getInstance().getMp4(new ResultCallback() {
+        RequestController.getInstance().getMp4(new ResultCallback() {
             @Override
             public void callback(String result) {
                 try {
@@ -46,7 +47,7 @@ public class MyApplication extends Application {
                         @Override
                         public void callback(String result) {
                             if (ResponseHandling.URL_ADD_SUCCESS.equals(result)) {
-                                Log.d("NetworkRequest", "mp4ResponseURL_ADD_SUCCESS");
+                                Log.d("RequestController", "mp4ResponseURL_ADD_SUCCESS");
                             }
                         }
                     });
@@ -89,7 +90,6 @@ public class MyApplication extends Application {
 
             @Override
             public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
-
             }
 
             @Override

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.customizedemo.mylibrary.api.NetworkRequest;
+import com.customizedemo.mylibrary.api.RequestController;
 import com.customizedemo.mylibrary.api.ResultCallback;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -37,7 +37,7 @@ public class RecyclerInfoView extends LinearLayout {
     }
 
     private void getInfo() {
-        NetworkRequest.getInstance().todayInHistory(new ResultCallback() {
+        RequestController.getInstance().todayInHistory(new ResultCallback() {
             @Override
             public void callback(String result) {
                 try {

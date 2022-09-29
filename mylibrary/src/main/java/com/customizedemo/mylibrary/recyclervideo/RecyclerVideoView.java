@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.customizedemo.mylibrary.api.NetworkRequest;
+import com.customizedemo.mylibrary.api.RequestController;
 import com.customizedemo.mylibrary.api.ResponseHandling;
 import com.customizedemo.mylibrary.api.ResultCallback;
 
@@ -46,7 +46,7 @@ public class RecyclerVideoView extends LinearLayout {
                             @Override
                             public void run() {
                                 if (ResponseHandling.URL_ADD_SUCCESS.equals(result)) {
-                                    Log.d("NetworkRequest", "mp4ResponseURL_ADD_SUCCESS");
+                                    Log.d("RequestController", "mp4ResponseURL_ADD_SUCCESS");
                                     adapter.notifyItemInserted(URLs.size() - 1);
                                 }
                             }
@@ -150,7 +150,7 @@ public class RecyclerVideoView extends LinearLayout {
 
     // 获取新的url
     private void addUrl() {
-        NetworkRequest.getInstance().getMp4(this.resultCallback);
+        RequestController.getInstance().getMp4(this.resultCallback);
     }
 
     /**

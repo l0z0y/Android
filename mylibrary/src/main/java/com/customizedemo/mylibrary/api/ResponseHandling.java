@@ -1,5 +1,7 @@
 package com.customizedemo.mylibrary.api;
 
+import static com.customizedemo.mylibrary.view.MusicView.songInfos;
+
 import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
 
@@ -50,5 +52,25 @@ public class ResponseHandling {
         }
     }
 
+    public static void mp3ResponseHandling(String result, ResultCallback callback) {
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(result);
+            JSONObject data = jsonObject.optJSONObject("data");
+            if (data != null) {
+                String url = data.optString("url");
+                String name = data.optString("name");
+                String picurl = data.optString("picurl");
+                String artistsname = data.optString("artistsname");
+                if (songInfos == null) {
+                    songInfos = new ArrayList<>();
+                }
+                songInfos.add(new MusicView.SongInfo(name, artistsname, url, picurl));
+                callback.callback(URL_ADD_SUCCESS);
+            }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
