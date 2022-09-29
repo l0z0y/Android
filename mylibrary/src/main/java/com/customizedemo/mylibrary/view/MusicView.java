@@ -3,18 +3,19 @@ package com.customizedemo.mylibrary.view;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.customizedemo.mylibrary.api.NetworkRequest;
 import com.customizedemo.mylibrary.api.ResultCallback;
 import com.customizedemo.mylibrary.util.ResUtil;
@@ -36,8 +37,9 @@ public class MusicView extends LinearLayout {
     private Button refresh, previous, stop, next;
     private MediaPlayer mediaPlayer;
     private final ScheduledExecutorService service = Executors.newScheduledThreadPool(5);
-    private List<SongInfo> songInfos = new ArrayList<>();
+    public static List<SongInfo> songInfos;
     private int nowIndex = 0;
+    ImageView imageView;
 
     public MusicView(Context context) {
         super(context);
@@ -52,31 +54,40 @@ public class MusicView extends LinearLayout {
         setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         setBackground(ResUtil.drawableValue(context, "background_shadow"));
 
-        LinearLayout textLinearLayout = new LinearLayout(context);
-        title = new TextView(context);
-        title.setTextSize(16);
-        LayoutParams titleParams = new LayoutParams(0, LayoutParams.MATCH_PARENT);
-        title.setSingleLine(true);
-        title.setEllipsize(TextUtils.TruncateAt.END);
+        LinearLayout titleLinearLayout = new LinearLayout(context);
+        imageView = new ImageView(context);
+        LayoutParams imageParams = new LayoutParams(ScreenUtil.dip2px(context, 60), ScreenUtil.dip2px(context, 60));
+        imageParams.topMargin = ScreenUtil.dip2px(context, 10);
+        imageParams.leftMargin = ScreenUtil.dip2px(context, 20);
+        titleLinearLayout.addView(imageView, imageParams);
+
+        LinearLayout infoLinearLayout = new LinearLayout(context);
+        LayoutParams infoParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        infoLinearLayout.setOrientation(VERTICAL);
+        infoLinearLayout.setGravity(Gravity.END);
+        infoParams.leftMargin = ScreenUtil.dip2px(context, 20);
+        infoParams.rightMargin = ScreenUtil.dip2px(context, 20);
+
+        title = new MarqueeTextView(context);
+        title.setTextSize(17);
+        LayoutParams titleParams = new LayoutParams(LayoutParams.MATCH_PARENT, 0);
+        title.setGravity(Gravity.END | Gravity.CENTER);
         title.setTextColor(Color.BLACK);
         titleParams.weight = 3;
-        titleParams.leftMargin = ScreenUtil.dip2px(context, 20);
-        textLinearLayout.addView(title, titleParams);
+        infoLinearLayout.addView(title, titleParams);
 
-        author = new TextView(context);
-        author.setTextSize(16);
+        author = new MarqueeTextView(context);
+        author.setTextSize(15);
         author.setTextColor(Color.BLACK);
-        author.setSingleLine(true);
-        author.setEllipsize(TextUtils.TruncateAt.END);
-        author.setGravity(Gravity.END);
-        LayoutParams authorParams = new LayoutParams(0, LayoutParams.MATCH_PARENT);
+        author.setGravity(Gravity.END | Gravity.CENTER);
+        LayoutParams authorParams = new LayoutParams(ScreenUtil.dip2px(context, 100), 0);
         authorParams.weight = 2;
-        authorParams.rightMargin = ScreenUtil.dip2px(context, 20);
-        textLinearLayout.addView(author, authorParams);
+        infoLinearLayout.addView(author, authorParams);
+
+        titleLinearLayout.addView(infoLinearLayout, infoParams);
 
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        params.topMargin = ScreenUtil.dip2px(context, 10);
-        addView(textLinearLayout, params);
+        addView(titleLinearLayout, params);
 
         LinearLayout progressLinearLayout = new LinearLayout(context);
         LayoutParams progressParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -167,10 +178,11 @@ public class MusicView extends LinearLayout {
         previous.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                seekBar.setProgress(0);
                 if (songInfos.size() > 1 && nowIndex >= 0) {
                     nowIndex--;
                     SongInfo songInfo = songInfos.get(nowIndex);
-                    play(songInfo.url, songInfo.name, songInfo.artistsname);
+                    play(songInfo);
                 } else {
                     Toast.makeText(context, "当前已经是第一首了", Toast.LENGTH_SHORT).show();
                 }
@@ -205,6 +217,7 @@ public class MusicView extends LinearLayout {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                seekBar.setProgress(0);
                 playNext();
             }
         });
@@ -260,8 +273,7 @@ public class MusicView extends LinearLayout {
             getNewSong();
         } else {
             nowIndex++;
-            SongInfo songInfo = songInfos.get(nowIndex);
-            play(songInfo.url, songInfo.name, songInfo.artistsname);
+            play(songInfos.get(nowIndex));
         }
     }
 
@@ -278,10 +290,14 @@ public class MusicView extends LinearLayout {
                     if (data != null) {
                         String url = data.optString("url");
                         String name = data.optString("name");
+                        String picurl = data.optString("picurl");
                         String artistsname = data.optString("artistsname");
-                        songInfos.add(new SongInfo(name, artistsname, url));
+                        if (songInfos == null) {
+                            songInfos = new ArrayList<>();
+                        }
+                        songInfos.add(new SongInfo(name, artistsname, url, picurl));
                         nowIndex = songInfos.size() - 1;
-                        play(url, name, artistsname);
+                        play(songInfos.get(nowIndex));
                     }
                 } catch (Exception e) {
                     Toast.makeText(getContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
@@ -293,16 +309,17 @@ public class MusicView extends LinearLayout {
 
     /**
      * 播放歌曲
-     *
-     * @param url
-     * @param name
-     * @param artistsname
      */
-    private void play(String url, String name, String artistsname) {
+    private void play(SongInfo songInfo) {
         try {
-            if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(artistsname) && !TextUtils.isEmpty(url)) {
+            String name = songInfo.name;
+            String url = songInfo.url;
+            String artistsName = songInfo.artistsname;
+            String picurl = songInfo.picurl;
+            if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(artistsName) && !TextUtils.isEmpty(url) && !TextUtils.isEmpty(picurl)) {
                 title.setText(name);
-                author.setText(artistsname);
+                author.setText(artistsName);
+                Glide.with(getContext()).load(picurl).into(imageView);
                 mediaPlayer.reset();
                 mediaPlayer.setDataSource(url);
                 mediaPlayer.prepareAsync();
@@ -355,11 +372,13 @@ public class MusicView extends LinearLayout {
         String name;
         String artistsname;
         String url;
+        String picurl;
 
-        public SongInfo(String name, String artistsname, String url) {
+        public SongInfo(String name, String artistsname, String url, String picurl) {
             this.name = name;
             this.artistsname = artistsname;
             this.url = url;
+            this.picurl = picurl;
         }
     }
 

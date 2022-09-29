@@ -11,11 +11,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.customizedemo.mylibrary.api.NetworkRequest;
 import com.customizedemo.mylibrary.api.ResultCallback;
 import com.customizedemo.mylibrary.dialog.WebDialog;
 import com.customizedemo.mylibrary.util.DecodeUtil;
+import com.customizedemo.mylibrary.util.ScreenUtil;
+import com.customizedemo.mylibrary.view.MarqueeTextView;
 import com.customizedemo.mylibrary.view.MusicView;
 
 import org.json.JSONException;
@@ -30,6 +33,7 @@ public class MainActivity extends Activity {
 
     private LinearLayout.LayoutParams params;
     private LinearLayout linearLayout;
+    private MusicView musicView;
 
 
     @Override
@@ -149,8 +153,8 @@ public class MainActivity extends Activity {
         linearLayout.addView(moveToday, params);
 
 
-        MusicView musicView = new MusicView(this);
-        addContentView(musicView,params);
+        musicView = new MusicView(this);
+        addContentView(musicView, params);
     }
 
 
@@ -171,7 +175,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-
+        musicView.destroy();
     }
 }

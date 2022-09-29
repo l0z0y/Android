@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import java.util.HashMap;
 
 /**
- *
  * 屏幕工具
  */
 public class ScreenUtil {

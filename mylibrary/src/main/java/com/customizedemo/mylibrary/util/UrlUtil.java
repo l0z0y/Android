@@ -29,8 +29,7 @@ public class UrlUtil {
     }
 
     //根据url获取网络图片
-    public static Drawable loadImageFromNetwork(String imageUrl)
-    {
+    public static Drawable loadImageFromNetwork(String imageUrl) {
         Drawable drawable = null;
         try {
             // 可以在这里通过文件名来判断，是否本地有此图片
@@ -45,7 +44,7 @@ public class UrlUtil {
             Log.d("loadImageFromNetwork", "drawable is ready");
         }
 
-        return drawable ;
+        return drawable;
     }
 
 }

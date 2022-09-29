@@ -66,7 +66,8 @@ public class NetworkRequest {
     }
 
     public void getMp4(ResultCallback resultCallback) {
-        RetrofitService.getInstance().api.getMp4("http://api.botwl.cn/api/weishi").enqueue(new Callback<ResponseBody>() {
+        String[] api = {"vs.php", "kuaishou.php"};
+        RetrofitService.getInstance().api.getMp4("http://api.wuxixindong.cn/api/" + api[new Random().nextInt(2)]).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
@@ -77,9 +78,7 @@ public class NetworkRequest {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
-
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
@@ -112,8 +111,8 @@ public class NetworkRequest {
     public void getMp3(ResultCallback resultCallback) {
         final String[] types = {"热歌榜", "新歌榜", "飙升榜", "抖音榜", "电音榜"};
         Random random = new Random();
-        int num = random.nextInt(4);
-        RetrofitService.getInstance().api.getMp3("https://api.uomg.com/api/rand.music?sort="+types[num]+"&format=json").enqueue(new Callback<ResponseBody>() {
+        int num = random.nextInt(5);
+        RetrofitService.getInstance().api.getMp3("https://api.uomg.com/api/rand.music?sort=" + types[num] + "&format=json").enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {

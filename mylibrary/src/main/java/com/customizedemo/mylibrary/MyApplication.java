@@ -4,25 +4,14 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.text.TextUtils;
-import android.util.Log;
-
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.customizedemo.mylibrary.api.NetworkRequest;
+import com.customizedemo.mylibrary.api.ResponseHandling;
 import com.customizedemo.mylibrary.api.ResultCallback;
 import com.customizedemo.mylibrary.carsh.CrashManager;
-import com.customizedemo.mylibrary.recyclervideo.RecyclerVideoView;
-import com.customizedemo.mylibrary.util.UrlUtil;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class MyApplication extends Application {
     private static final String LIFETAG = "Lifecycle";
@@ -44,7 +33,6 @@ public class MyApplication extends Application {
             initUrls();
         }
 
-
         mContext = this;
         initLifecycle();
     }
@@ -54,26 +42,16 @@ public class MyApplication extends Application {
             @Override
             public void callback(String result) {
                 try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    if ("-1".equals(jsonObject.optString("code", "-1"))) {
-                        Toast.makeText(mContext, "加载api错误", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    String url = jsonObject.optString("url");
-                    String pic = jsonObject.optString("img");
-                    if (!TextUtils.isEmpty(url) && !TextUtils.isEmpty(pic)) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (RecyclerVideoView.URLs == null) {
-                                    RecyclerVideoView.URLs = new ArrayList<>();
-                                }
-                                RecyclerVideoView.URLs.add(new RecyclerVideoView.UriPic(url, UrlUtil.loadImageFromNetwork(pic)));
+                    ResponseHandling.mp4ResponseHandling(result, new ResultCallback() {
+                        @Override
+                        public void callback(String result) {
+                            if (ResponseHandling.URL_ADD_SUCCESS.equals(result)) {
+                                Log.d("NetworkRequest", "mp4ResponseURL_ADD_SUCCESS");
                             }
-                        }).start();
+                        }
+                    });
 
-                    }
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
