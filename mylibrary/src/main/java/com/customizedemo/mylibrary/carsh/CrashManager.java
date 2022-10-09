@@ -24,7 +24,7 @@ public class CrashManager {
 
 
     private CrashManager() {
-        handlerThread = new HandlerThread("LSThread-0");
+        handlerThread = new HandlerThread("Thread-0");
         handlerThread.start();
         workHandler = new Handler(handlerThread.getLooper()) {
             @Override

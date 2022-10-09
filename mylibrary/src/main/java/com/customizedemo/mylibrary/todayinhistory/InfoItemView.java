@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.customizedemo.mylibrary.activitys.WebViewActivity;
 import com.customizedemo.mylibrary.util.ResUtil;
 import com.customizedemo.mylibrary.util.ScreenUtil;
+import com.customizedemo.mylibrary.view.MarqueeTextView;
 
 public class InfoItemView extends LinearLayout {
 
@@ -45,7 +46,7 @@ public class InfoItemView extends LinearLayout {
         year.setGravity(Gravity.CENTER);
         year.setTextColor(Color.BLACK);
 
-        title = new TextView(context);
+        title = new MarqueeTextView(context);
         title.setTextSize(18);
         title.setTextColor(Color.BLACK);
         title.setGravity(Gravity.CENTER);

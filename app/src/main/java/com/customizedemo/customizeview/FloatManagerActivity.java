@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.customizedemo.mylibrary.floatingball.FloatManager;
 import com.customizedemo.mylibrary.floatingball.FloatingBallView;
+import com.customizedemo.mylibrary.util.ResUtil;
 
 public class FloatManagerActivity extends Activity {
 
@@ -75,7 +76,7 @@ public class FloatManagerActivity extends Activity {
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FloatManager.getInstance().addProgress(10);
+//                FloatManager.getInstance().addProgress(10);
             }
         });
         linearLayout.addView(button3, params);
@@ -86,7 +87,7 @@ public class FloatManagerActivity extends Activity {
         button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FloatManager.getInstance().reduceProgress(5);
+//                FloatManager.getInstance().reduceProgress(5);
             }
         });
         linearLayout.addView(button4, params);
@@ -98,7 +99,7 @@ public class FloatManagerActivity extends Activity {
         button5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FloatManager.getInstance().create(FloatManagerActivity.this, true, new FloatingBallView.ActionListener() {
+                FloatManager.getInstance().create(FloatManagerActivity.this,  new FloatingBallView.ActionListener() {
                     @Override
                     public void onClick() {
                         Toast.makeText(FloatManagerActivity.this, "点击了悬浮窗", Toast.LENGTH_SHORT).show();
@@ -112,7 +113,6 @@ public class FloatManagerActivity extends Activity {
                     }
                 });
                 FloatManager.getInstance().display();
-
             }
         });
         linearLayout.addView(button5, params);
@@ -129,13 +129,12 @@ public class FloatManagerActivity extends Activity {
         linearLayout.addView(button6, params);
 
         Button button7 = new Button(this);
-        button7.setText("正常显示");
+        button7.setText("显示悬浮球");
         button7.setTextSize(18);
         button7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FloatManager.getInstance().halfShow();
-            }
+                 }
         });
         linearLayout.addView(button7, params);
     }
