@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,7 @@ import com.customizedemo.mylibrary.util.ScreenUtil;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -39,6 +41,7 @@ public class MusicView extends LinearLayout {
     public static List<SongInfo> songInfos;
     private int nowIndex = 0;
     private ImageView imageView;
+    private boolean isTrackTouch = false;
 
 
     public MusicView(Context context) {
@@ -57,7 +60,7 @@ public class MusicView extends LinearLayout {
                 ResponseHandling.mp3ResponseHandling(result, new ResultCallback() {
                     @Override
                     public void callback(String result) {
-                        if (ResponseHandling.URL_ADD_SUCCESS.equals(result)) {
+                        if (result.startsWith(ResponseHandling.URL_ADD_SUCCESS)) {
                             if (MyApplication.firstCall) {
                                 MyApplication.firstCall = false;
                                 play(songInfos.get(nowIndex));
@@ -157,11 +160,13 @@ public class MusicView extends LinearLayout {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
+                isTrackTouch = true;
 
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                isTrackTouch = false;
                 mediaPlayer.seekTo(seekBar.getProgress());
 
             }
@@ -201,7 +206,7 @@ public class MusicView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 seekBar.setProgress(0);
-                if (songInfos.size() > 1 && nowIndex >= 0) {
+                if (songInfos.size() > 1 && nowIndex > 0) {
                     nowIndex--;
                     SongInfo songInfo = songInfos.get(nowIndex);
                     play(songInfo);
@@ -254,8 +259,11 @@ public class MusicView extends LinearLayout {
         mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
+                Log.i("MediaPlayer", "onError");
                 Toast.makeText(getContext(), "加载歌曲失败,歌曲也许不见了~", Toast.LENGTH_SHORT).show();
-                return false;
+                mediaPlayer.reset();
+                playNext();
+                return true;
             }
         });
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -275,7 +283,7 @@ public class MusicView extends LinearLayout {
                 service.scheduleAtFixedRate(new Runnable() {
                     @Override
                     public void run() {
-                        if (mediaPlayer.isPlaying()) {
+                        if (mediaPlayer.isPlaying() && !isTrackTouch) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 seekBar.setProgress(mediaPlayer.getCurrentPosition(), true);
                             } else {
@@ -289,11 +297,14 @@ public class MusicView extends LinearLayout {
     }
 
     private void playNext() {
-        if (songInfos.size() - 3 == nowIndex) {
+        if (songInfos.size() - 3 <= nowIndex) {
             getNewSong();
-        } else {
+        }
+        if (nowIndex < songInfos.size() - 1) {
             nowIndex++;
             play(songInfos.get(nowIndex));
+        } else {
+            Toast.makeText(getContext(), "歌曲正在加载中", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -301,26 +312,32 @@ public class MusicView extends LinearLayout {
      * 获取新歌曲并播放
      */
     private void getNewSong() {
-        RequestController.getInstance().getMp3(new ResultCallback() {
-            @Override
-            public void callback(String result) {
-                try {
-                    ResponseHandling.mp3ResponseHandling(result, new ResultCallback() {
-                        @Override
-                        public void callback(String result) {
-                            if (ResponseHandling.URL_ADD_SUCCESS.equals(result)) {
-                                nowIndex++;
-                                play(songInfos.get(nowIndex));
-                            }
-                        }
-                    });
-                } catch (
-                        Exception e) {
-                    Toast.makeText(getContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
+        if (new Random().nextBoolean()) {
+            RequestController.getInstance().getSongFromPlaylist(new ResultCallback() {
+                @Override
+                public void callback(String result) {
+                    Log.i(ResponseHandling.URL_ADD_SUCCESS, result.substring(result.indexOf("\n")));
                 }
-            }
-        });
+            });
+        } else {
+            RequestController.getInstance().getMp3(new ResultCallback() {
+                @Override
+                public void callback(String result) {
+                    try {
+                        ResponseHandling.mp3ResponseHandling(result, new ResultCallback() {
+                            @Override
+                            public void callback(String result) {
+                                Log.i(ResponseHandling.URL_ADD_SUCCESS, result.substring(result.indexOf("\n")));
+                            }
+                        });
+                    } catch (
+                            Exception e) {
+                        Toast.makeText(getContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -344,6 +361,7 @@ public class MusicView extends LinearLayout {
             }
         } catch (Exception e) {
             Toast.makeText(getContext(), "加载歌曲失败", Toast.LENGTH_SHORT).show();
+            playNext();
             e.printStackTrace();
         }
     }

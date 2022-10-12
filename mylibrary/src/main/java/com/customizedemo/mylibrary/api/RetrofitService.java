@@ -1,8 +1,5 @@
 package com.customizedemo.mylibrary.api;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.IOException;
@@ -23,6 +20,7 @@ public class RetrofitService {
     private static RetrofitService instance;
     private Retrofit retrofit;
     public Api api;
+    private final String TAG = "RetrofitService";
 
     public static RetrofitService getInstance() {
         if (instance == null) {
@@ -53,7 +51,7 @@ public class RetrofitService {
                             e.printStackTrace();
                         }
                     }
-                }).setLevel(HttpLoggingInterceptor.Level.BODY))
+                }).setLevel(HttpLoggingInterceptor.Level.BASIC))
                 .addInterceptor(new Interceptor() {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
@@ -90,10 +88,10 @@ public class RetrofitService {
                             request = builder.url(newFullUrl).build();
                         }
                         Response response = chain.proceed(request);
-                        //返回结果失败则 重新请求3次
+                        //返回结果失败则重新请求3次
                         while (!response.isSuccessful() && retryNum < maxRetry) {
                             retryNum++;
-                            Log.i("NetWorkRequest", request.url()+"请求失败\n--响应码:" + response.code() +"-- 重新请求第:" + retryNum + "次");
+                            Log.i("NetWorkRequest", request.url() + "请求失败\n--响应码:" + response.code() + "-- 重新请求第:" + retryNum + "次");
                             response = chain.proceed(request);
                         }
                         return response;

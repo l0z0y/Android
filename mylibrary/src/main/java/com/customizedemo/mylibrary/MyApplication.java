@@ -13,11 +13,15 @@ import com.customizedemo.mylibrary.api.ResponseHandling;
 import com.customizedemo.mylibrary.api.ResultCallback;
 import com.customizedemo.mylibrary.carsh.CrashManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MyApplication extends Application {
     private static final String LIFETAG = "Lifecycle";
 
     private static MyApplication mContext;
     public static boolean firstCall = true;
+    public static List<String> playlists = new ArrayList<String>();
 
 
     public static MyApplication getContext() {
@@ -27,6 +31,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        RequestController.getInstance().getPlaylists();
         // 加载异常收集
         CrashManager.getInstance().init(this);
         // 初始化视频urls

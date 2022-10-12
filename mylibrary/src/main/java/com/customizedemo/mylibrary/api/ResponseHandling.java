@@ -66,7 +66,7 @@ public class ResponseHandling {
                     songInfos = new ArrayList<>();
                 }
                 songInfos.add(new MusicView.SongInfo(name, artistsname, url, picurl));
-                callback.callback(URL_ADD_SUCCESS);
+                callback.callback(URL_ADD_SUCCESS+"\n"+"歌曲: "+name+" —— "+artistsname);
             }
 
         } catch (Exception e) {

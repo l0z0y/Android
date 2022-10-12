@@ -28,4 +28,13 @@ public interface Api {
 
     @GET()
     Call<ResponseBody> getMp3(@Url String url);
+
+    @GET()
+    Call<ResponseBody> getSongFromId(@Url String url);
+
+    @GET()
+    Call<ResponseBody> getSongFromPlaylist(@Url String url);
+
+    @GET()
+    Call<ResponseBody> getPlaylists(@Url String url);
 }

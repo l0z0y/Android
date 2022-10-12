@@ -198,16 +198,21 @@ public class RecyclerVideoView extends LinearLayout {
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
             // 获取itemView
             ItemView itemView = new ItemView(context);
+            Field mMediaPlayer = null;
+            try {
+                mMediaPlayer = itemView.videoView.getClass().getDeclaredField("mMediaPlayer");
+                mMediaPlayer.setAccessible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Field finalMMediaPlayer = mMediaPlayer;
             itemView.setOnLongClickListener(new OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     try {
-                        Field mMediaPlayer = itemView.videoView.getClass().getDeclaredField("mMediaPlayer");
-                        mMediaPlayer.setAccessible(true);
-                        MediaPlayer o = (MediaPlayer) mMediaPlayer.get(itemView.videoView);
+                        MediaPlayer o = (MediaPlayer) finalMMediaPlayer.get(itemView.videoView);
                         if (o != null) {
                             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                                 o.setPlaybackParams(o.getPlaybackParams().setSpeed(2));
@@ -219,6 +224,7 @@ public class RecyclerVideoView extends LinearLayout {
                     return true;
                 }
             });
+            Field finalMMediaPlayer1 = mMediaPlayer;
             itemView.setOnTouchListener(new OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -232,9 +238,7 @@ public class RecyclerVideoView extends LinearLayout {
                                 Toast.makeText(context, "点击", Toast.LENGTH_SHORT).show();
                             } else {
                                 try {
-                                    Field mMediaPlayer = itemView.videoView.getClass().getDeclaredField("mMediaPlayer");
-                                    mMediaPlayer.setAccessible(true);
-                                    MediaPlayer o = (MediaPlayer) mMediaPlayer.get(itemView.videoView);
+                                    MediaPlayer o = (MediaPlayer) finalMMediaPlayer1.get(itemView.videoView);
                                     if (o != null) {
                                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                                             o.setPlaybackParams(o.getPlaybackParams().setSpeed(1));
@@ -288,5 +292,6 @@ public class RecyclerVideoView extends LinearLayout {
             this.bitmapDrawable = drawable;
         }
     }
+
 
 }
