@@ -46,7 +46,7 @@ public class RecyclerVideoView extends LinearLayout {
                             @Override
                             public void run() {
                                 if (ResponseHandling.URL_ADD_SUCCESS.equals(result)) {
-                                    Log.d("RequestController", "mp4ResponseURL_ADD_SUCCESS");
+                                    Log.d(ResponseHandling.RESPONSE_HANDLER, ResponseHandling.URL_ADD_SUCCESS + " --> "+result.substring(result.indexOf("\n")));
                                     adapter.notifyItemInserted(URLs.size() - 1);
                                 }
                             }

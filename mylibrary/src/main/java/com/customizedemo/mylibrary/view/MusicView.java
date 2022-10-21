@@ -316,7 +316,7 @@ public class MusicView extends LinearLayout {
             RequestController.getInstance().getSongFromPlaylist(new ResultCallback() {
                 @Override
                 public void callback(String result) {
-                    Log.i(ResponseHandling.URL_ADD_SUCCESS, result.substring(result.indexOf("\n")));
+//                    Log.i(ResponseHandling.URL_ADD_SUCCESS, result.substring(result.indexOf("\n")));
                 }
             });
         } else {
@@ -327,7 +327,7 @@ public class MusicView extends LinearLayout {
                         ResponseHandling.mp3ResponseHandling(result, new ResultCallback() {
                             @Override
                             public void callback(String result) {
-                                Log.i(ResponseHandling.URL_ADD_SUCCESS, result.substring(result.indexOf("\n")));
+//                                Log.i(ResponseHandling.URL_ADD_SUCCESS, result.substring(result.indexOf("\n")));
                             }
                         });
                     } catch (

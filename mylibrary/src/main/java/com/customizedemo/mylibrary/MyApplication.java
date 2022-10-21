@@ -51,8 +51,8 @@ public class MyApplication extends Application {
                     ResponseHandling.mp4ResponseHandling(result, new ResultCallback() {
                         @Override
                         public void callback(String result) {
-                            if (ResponseHandling.URL_ADD_SUCCESS.equals(result)) {
-                                Log.d("RequestController", "mp4ResponseURL_ADD_SUCCESS");
+                            if (result.startsWith(ResponseHandling.URL_ADD_SUCCESS)) {
+                                Log.d(ResponseHandling.RESPONSE_HANDLER, ResponseHandling.URL_ADD_SUCCESS + " --> "+result.substring(result.indexOf("\n")));
                             }
                         }
                     });

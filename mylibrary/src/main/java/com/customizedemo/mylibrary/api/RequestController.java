@@ -1,5 +1,7 @@
 package com.customizedemo.mylibrary.api;
 
+import android.util.Log;
+
 import com.customizedemo.mylibrary.MyApplication;
 
 import org.json.JSONArray;
@@ -140,7 +142,9 @@ public class RequestController {
 
     public void getSongFromPlaylist(ResultCallback resultCallback) {
         if (MyApplication.playlists != null && MyApplication.playlists.size() > 0) {
-            RetrofitService.getInstance().api.getSongFromPlaylist("https://lzy-musics.eu.org/playlist/detail?id=" + MyApplication.playlists.get(new Random().nextInt(4))).enqueue(new Callback<ResponseBody>() {
+            String s = MyApplication.playlists.get(new Random().nextInt(4));
+            Log.d("getSongFromPlaylist: ", s);
+            RetrofitService.getInstance().api.getSongFromPlaylist("https://lzy-musics.eu.org/playlist/detail?id=" + s).enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
@@ -214,9 +218,48 @@ public class RequestController {
                         for (int i = 0; i < playlist.length(); i++) {
                             JSONObject data = playlist.optJSONObject(i);
                             String id = data.optString("id", "0");
+                            String name = data.optString("name");
+                            Log.i(ResponseHandling.RESPONSE_HANDLER, ResponseHandling.URL_ADD_SUCCESS + " --> 添加歌单：" + name + " —— " + "id: " + id);
                             MyApplication.playlists.add(id);
                         }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void addPicUrl(String data) {
+        RetrofitService.getInstance().api.addPicUrl("https://hn216.api.yesapi.cn/?s=App.Table.Create&return_data=0&model_name=pic&data=" + data + "&app_key=7C365D9721D66F47FC31741903341E36&sign=A3B5FD9488BDB2F6893C033D0E3EBE11").enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    Log.i("addPicUrl", "onResponse: " + response.body().string());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void getAllPicUrl() {
+        RetrofitService.getInstance().api.getAllPicUrl("" +
+                "http://hn216.api.yesapi.cn/?model_name=pic&where=%5B%5B%22id%22%2C%22%3E%22%2C0%5D%5D&order=%5B%22id+DESC%22%5D&perpage=100&page=1&select=id%2Curl&s=App.Table.FreeQuery&app_key=7C365D9721D66F47FC31741903341E36&sign=BFA0564EFE80FDE3DE86443623E15BEB").enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    Log.i("addPicUrl", "onResponse: " + response.body().string());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

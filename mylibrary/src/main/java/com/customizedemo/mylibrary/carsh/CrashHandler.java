@@ -9,6 +9,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 
+import com.alibaba.ha.adapter.service.tlog.TLogService;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -66,7 +68,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      */
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        Log.d(TAG, "发生异常：----------------------\n" + getStackTraceString(ex));
+        TLogService.loge("CrashHandle",TAG, "发生异常：----------------------\n" + getStackTraceString(ex));
         handleException(ex);
         if (mDefaultHandler != null) {
             SystemClock.sleep(1000);

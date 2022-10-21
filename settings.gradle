@@ -13,6 +13,11 @@ dependencyResolutionManagement {
         flatDir {
             dirs 'libs'
         }
+        repositories {
+            maven {
+                url "https://maven.aliyun.com/nexus/content/repositories/releases"
+            }
+        }
     }
 }
 rootProject.name = "CustomizeView"

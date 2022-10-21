@@ -37,4 +37,11 @@ public interface Api {
 
     @GET()
     Call<ResponseBody> getPlaylists(@Url String url);
+
+    @GET()
+    Call<ResponseBody> addPicUrl(@Url String url);
+
+    @GET()
+    Call<ResponseBody> getAllPicUrl(@Url String url);
+
 }
