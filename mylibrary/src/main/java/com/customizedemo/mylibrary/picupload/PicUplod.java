@@ -1,4 +1,4 @@
-package com.customizedemo.mylibrary.qiniu;
+package com.customizedemo.mylibrary.picupload;
 
 
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
-import com.qiniu.android.common.FixedZone;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.Configuration;
 import com.qiniu.android.storage.UpCompletionHandler;

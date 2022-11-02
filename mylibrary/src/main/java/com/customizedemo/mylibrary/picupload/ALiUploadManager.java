@@ -1,4 +1,4 @@
-package com.customizedemo.mylibrary.qiniu;
+package com.customizedemo.mylibrary.picupload;
 
 import android.content.Context;
 import android.text.format.DateFormat;
@@ -16,15 +16,16 @@ import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.ObjectMetadata;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
+import com.customizedemo.mylibrary.util.DecodeUtil;
 
 import java.io.File;
 import java.util.Date;
 
 public class ALiUploadManager {
 
-    public static final String ACCESS_ID = "LTAI5tGdXvZ2dbASWZX2y983";                                  //阿里云ID
-    public static final String ACCESS_KEY = "eWUmVB3NbrfX6MsrLkNOdugcqOn6ED";                           //阿里云KEY
-    public static final String ACCESS_BUCKET_NAME = "tly-lzy";
+    public static String ACCESS_ID;                                  //阿里云ID
+    public static String ACCESS_KEY;                           //阿里云KEY
+    public static String ACCESS_BUCKET_NAME;
     public static final String ACCESS_ENDPOINT = "http://oss-cn-hangzhou.aliyuncs.com";
     public static final String ACCESS_DOMAINNAME = "http:xxxxx";
 
@@ -48,6 +49,10 @@ public class ALiUploadManager {
      * @param context
      */
     public void init(Context context) {
+        ALiOSSUser aLiOSSUser = ALiOSSUser.get(context);
+        ACCESS_ID = DecodeUtil.decodeByBase64(aLiOSSUser.getAppId());
+        ACCESS_KEY = DecodeUtil.decodeByBase64(aLiOSSUser.getAppkey());
+        ACCESS_BUCKET_NAME = DecodeUtil.decodeByBase64(aLiOSSUser.getBucketName());
         OSSCredentialProvider credentialProvider = new OSSPlainTextAKSKCredentialProvider(ACCESS_ID, ACCESS_KEY);
         ClientConfiguration conf = new ClientConfiguration();
         conf.setConnectionTimeout(15 * 1000);               // 连接超时，默认15秒
@@ -70,7 +75,7 @@ public class ALiUploadManager {
         // meta设置请求头
         ObjectMetadata meta = new ObjectMetadata();
         meta.setContentType("image/jpg");
-        PutObjectRequest put = new PutObjectRequest(ACCESS_BUCKET_NAME, key, filePath,meta);
+        PutObjectRequest put = new PutObjectRequest(ACCESS_BUCKET_NAME, key, filePath, meta);
         // 异步上传时可以设置进度回调
         put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
             @Override
@@ -81,7 +86,7 @@ public class ALiUploadManager {
             }
         });
 
-         OSSAsyncTask task = ossClient.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+        OSSAsyncTask task = ossClient.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
             @Override
             public void onSuccess(PutObjectRequest request, PutObjectResult result) {
                 if (callBack != null) {

@@ -1,4 +1,4 @@
-package com.customizedemo.mylibrary.qiniu;
+package com.customizedemo.mylibrary.picupload;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -1,5 +1,8 @@
 package com.customizedemo.mylibrary.util;
 
+import android.util.Base64;
+
+import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,5 +42,15 @@ public class DecodeUtil {
             str = str.replace(matcher.group(1), ch + "");
         }
         return str;
+    }
+
+    public static String decodeByBase64(String str) {
+        try {
+            byte[] contentByte = Base64.decode(str.getBytes(), Base64.DEFAULT);
+            return new String(contentByte, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

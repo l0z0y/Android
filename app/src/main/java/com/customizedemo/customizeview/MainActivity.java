@@ -16,15 +16,14 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.alibaba.ha.adapter.service.tlog.TLogService;
-import com.alibaba.sdk.android.logger.ILog;
 import com.alibaba.sdk.android.oss.ClientException;
 import com.alibaba.sdk.android.oss.ServiceException;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.customizedemo.mylibrary.api.RequestController;
 import com.customizedemo.mylibrary.dialog.WebDialog;
-import com.customizedemo.mylibrary.qiniu.ALiUploadManager;
-import com.customizedemo.mylibrary.qiniu.PicUplod;
+import com.customizedemo.mylibrary.picupload.ALiUploadManager;
+import com.customizedemo.mylibrary.picupload.PicUplod;
 import com.customizedemo.mylibrary.view.MusicView;
 
 public class MainActivity extends Activity {

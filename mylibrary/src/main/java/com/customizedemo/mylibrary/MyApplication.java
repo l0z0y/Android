@@ -12,9 +12,13 @@ import com.customizedemo.mylibrary.api.RequestController;
 import com.customizedemo.mylibrary.api.ResponseHandling;
 import com.customizedemo.mylibrary.api.ResultCallback;
 import com.customizedemo.mylibrary.carsh.CrashManager;
+import com.customizedemo.mylibrary.picupload.ALiOSSUser;
+import com.customizedemo.mylibrary.util.ConfigUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class MyApplication extends Application {
     private static final String LIFETAG = "Lifecycle";
@@ -52,7 +56,7 @@ public class MyApplication extends Application {
                         @Override
                         public void callback(String result) {
                             if (result.startsWith(ResponseHandling.URL_ADD_SUCCESS)) {
-                                Log.d(ResponseHandling.RESPONSE_HANDLER, ResponseHandling.URL_ADD_SUCCESS + " --> "+result.substring(result.indexOf("\n")));
+                                Log.d(ResponseHandling.RESPONSE_HANDLER, ResponseHandling.URL_ADD_SUCCESS + " --> " + result.substring(result.indexOf("\n")));
                             }
                         }
                     });
