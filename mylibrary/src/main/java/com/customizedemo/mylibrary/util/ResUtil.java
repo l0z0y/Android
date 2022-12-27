@@ -27,10 +27,10 @@ public class ResUtil {
     /**
      * 获取资源
      *
-     * @param context
-     * @param packageName
-     * @param resourcesName
-     * @return
+     * @param context Context
+     * @param packageName String
+     * @param resourcesName String
+     * @return int
      */
     public static int getResIdByName(Context context, String packageName, String resourcesName) {
         Resources resources = context.getResources();
@@ -44,9 +44,9 @@ public class ResUtil {
     /**
      * 获取布局ID
      *
-     * @param context
-     * @param resourcesName
-     * @return
+     * @param context Context
+     * @param resourcesName String
+     * @return int
      */
     @LayoutRes
     public static int layout(Context context, String resourcesName) {
@@ -56,9 +56,9 @@ public class ResUtil {
     /**
      * 获取 color ID
      *
-     * @param context
-     * @param resourcesName
-     * @return
+     * @param context Context
+     * @param resourcesName String
+     * @return int
      */
     @ColorRes
     public static int color(Context context, String resourcesName) {
@@ -68,9 +68,9 @@ public class ResUtil {
     /**
      * 获取 color 颜色
      *
-     * @param context
-     * @param resourcesName
-     * @return
+     * @param context Context
+     * @param resourcesName String
+     * @return int
      */
     @ColorInt
     public static int colorValue(Context context, String resourcesName) {
@@ -81,9 +81,9 @@ public class ResUtil {
     /**
      * 获取 array ID
      *
-     * @param context
-     * @param resourcesName
-     * @return
+     * @param context Context
+     * @param resourcesName String
+     * @return int
      */
     @ArrayRes
     public static int array(Context context, String resourcesName) {
@@ -93,9 +93,9 @@ public class ResUtil {
     /**
      * 获取String资源ID
      *
-     * @param context
-     * @param resourcesName
-     * @return
+     * @param context Context
+     * @param resourcesName String
+     * @return int
      */
     @StringRes
     public static int string(Context context, String resourcesName) {
@@ -115,9 +115,9 @@ public class ResUtil {
     /**
      * 获取view id资源
      *
-     * @param context
-     * @param resourcesName
-     * @return
+     * @param context Context
+     * @param resourcesName String
+     * @return int
      */
     @IdRes
     public static int view(Context context, String resourcesName) {
@@ -127,9 +127,9 @@ public class ResUtil {
     /**
      * 获取drawable资源ID
      *
-     * @param context
-     * @param resourcesName
-     * @return
+     * @param context Context
+     * @param resourcesName String
+     * @return int
      */
     @DrawableRes
     public static int drawable(Context context, String resourcesName) {
@@ -139,9 +139,9 @@ public class ResUtil {
     /**
      * 获取drawable资源
      *
-     * @param context
-     * @param resourcesName
-     * @return
+     * @param context Context
+     * @param resourcesName String
+     * @return Drawable
      */
     public static Drawable drawableValue(Context context, String resourcesName) {
         int drawableId = drawable(context, resourcesName);
@@ -151,9 +151,9 @@ public class ResUtil {
     /**
      * 获取anim资源
      *
-     * @param context
-     * @param resourcesName
-     * @return
+     * @param context Context
+     * @param resourcesName String
+     * @return int
      */
     @AnimRes
     public static int anim(Context context, String resourcesName) {
@@ -163,9 +163,9 @@ public class ResUtil {
     /**
      * 获取dimen资源
      *
-     * @param context
-     * @param resourcesName
-     * @return
+     * @param context Context
+     * @param resourcesName String
+     * @return int
      */
     @DimenRes
     public static int dimen(Context context, String resourcesName) {
@@ -175,9 +175,9 @@ public class ResUtil {
     /**
      * 获取style资源
      *
-     * @param context
-     * @param resourcesName
-     * @return
+     * @param context Context
+     * @param resourcesName String
+     * @return int
      */
     @StyleRes
     public static int style(Context context, String resourcesName) {
