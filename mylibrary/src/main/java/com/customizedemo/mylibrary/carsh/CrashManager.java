@@ -21,7 +21,13 @@ public class CrashManager {
     private final HandlerThread handlerThread;
     private final Handler workHandler;
 
+    /**
+     * 保存并发送错误信息
+     */
     public static final int MSG_SAVE_AND_SENT_CRASH_INFO = 1;
+    /**
+     * 仅发送错误信息
+     */
     public static final int MSG_JUST_SEND_CRASH_INFO = 2;
     private Context context;
 
@@ -34,7 +40,7 @@ public class CrashManager {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == MSG_SAVE_AND_SENT_CRASH_INFO) {
-
+                    //todo 保存并发送错误信息
 
                 } else if (msg.what == MSG_JUST_SEND_CRASH_INFO) {
                     Log.i("Crash", "handleMessage ");
