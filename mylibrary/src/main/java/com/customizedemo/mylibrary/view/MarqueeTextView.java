@@ -5,6 +5,10 @@ import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 
 
+/**
+ * 跑马灯 TextView
+ * @author lzy
+ */
 public class MarqueeTextView extends AppCompatTextView {
 
     public MarqueeTextView(Context context) {
@@ -22,6 +26,7 @@ public class MarqueeTextView extends AppCompatTextView {
 
     /**
      * 判断是否处于焦点，处于焦点时才会有滚动效果
+     *
      * @return
      */
     @Override
